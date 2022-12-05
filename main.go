@@ -1,9 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	fmt.Printf("Hello World!")
+	r := gin.Default()
+
+	public := r.Group("/api")
+	public.POST("/register", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "this is register endpoint!"})
+	})
+	r.Run(":8080")
 }
