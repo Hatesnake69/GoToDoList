@@ -3,6 +3,8 @@ package controllers
 import (
 	"net/http"
 
+	"GoToDoList/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +17,16 @@ func Register(c *gin.Context) {
 
 	var input RegisterInput
 	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	u := models.User{}
+
+	u.Username, u.Password = input.Username, input.Password
+
+	_, err := u.SaveUser()
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
